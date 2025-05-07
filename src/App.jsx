@@ -76,6 +76,11 @@ class App extends React.Component {
                 }
               })
             }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                this.getSpecificPokemon(this.state.pokemonSearchTerm)
+              }
+            }}
           />
           <button onClick={() => this.getSpecificPokemon(this.state.pokemonSearchTerm)}>Search!</button>
         </section>
