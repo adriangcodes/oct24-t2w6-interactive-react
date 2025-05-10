@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import '../App.css'
+import { useParams } from 'react-router-dom'
 
 export function PokemonSearcher() {
   
+  let {searchTerm} = useParams()
+
   // let [pokemonData, setPokemonData] = useState({})
   let [pokemonName, setPokemonName] = useState("")
-  let [_, setPokemonId] = useState(0)
+  // let [_, setPokemonId] = useState(0)
   let [pokemonSpriteUrl, setPokemonSpriteUrl] = useState("")
   let [pokemonSearchTerm, setPokemonSearchTerm] = useState("")
 
@@ -14,12 +17,17 @@ export function PokemonSearcher() {
   useEffect(() => {
     console.log("Use effect says hello world!")
 
-    getRandomPokemon()
+    if (searchTerm) {
+      setPokemonSearchTerm(searchTerm)
+      getSpecificPokemon(searchTerm)
+    } else {
+      getRandomPokemon()
+    }
 
     // Return inside useeffect is the equivalent of componentWillUnmount
-    return (() => {
-      console.log("Component is unmounting now.")
-    })
+    // return (() => {
+    //   console.log("Component is unmounting now.")
+    // })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Function watches what is defined in the array
 
@@ -51,19 +59,8 @@ export function PokemonSearcher() {
     console.log(data)
 
     setPokemonName(data.name)
-    setPokemonId(data.id)
+    // setPokemonId(data.id)
     setPokemonSpriteUrl(data.sprites.other.home.front_default)
-
-    // setPokemonData((previousState) => {
-    //   return {
-    //     // Guarantee that previous state is all kept
-    //     ...previousState,
-    //     // Overwrite the parts we want to updated
-    //     pokemonName: data.name,
-    //     pokemonId: data.id,
-    //     pokemonSpriteUrl: data.sprites.other.home.front_default
-    //   }
-    // })
   }
   
   return (
@@ -105,103 +102,105 @@ export function PokemonSearcher() {
   )
 }
 
-class App extends React.Component {
-  constructor(){
-    super();
+export default PokemonSearcher
 
-    this.state = {
-      pokemonId: 0,
-      pokemonName: "",
-      pokemonSpriteUrl: ""
-    }
+// class App extends React.Component {
+//   constructor(){
+//     super();
 
-    this.getRandomPokemon = this.getRandomPokemon.bind(this);
-  }
+//     this.state = {
+//       pokemonId: 0,
+//       pokemonName: "",
+//       pokemonSpriteUrl: ""
+//     }
 
-  // async componentDidMount(){
-  //   console.log('Component mounted.')
+//     this.getRandomPokemon = this.getRandomPokemon.bind(this);
+//   }
 
-  //   this.getRandomPokemon()
-  // }
+//   // async componentDidMount(){
+//   //   console.log('Component mounted.')
 
-  // componentDidUpdate(){
-  //   console.log(this.state)
-  // }
+//   //   this.getRandomPokemon()
+//   // }
 
-  // componentWillUnmount(){
-  //   console.log('API call is all done, goodbye!')
-  // }
+//   // componentDidUpdate(){
+//   //   console.log(this.state)
+//   // }
 
-  async getRandomPokemon() {
-    let randomPokemonId = Math.floor(Math.random() * 1025) + 1
-    console.log('Random pokemon ID to get is: ' + randomPokemonId)
+//   // componentWillUnmount(){
+//   //   console.log('API call is all done, goodbye!')
+//   // }
 
-    this.getSpecificPokemon(randomPokemonId)
-  }
+//   async getRandomPokemon() {
+//     let randomPokemonId = Math.floor(Math.random() * 1025) + 1
+//     console.log('Random pokemon ID to get is: ' + randomPokemonId)
 
-  async getSpecificPokemon(targetPokemonValue){
-    let response = await fetch("https://pokeapi.co/api/v2/pokemon/" + targetPokemonValue)
-    let data = await response.json()
+//     this.getSpecificPokemon(randomPokemonId)
+//   }
 
-    console.log(data)
+//   async getSpecificPokemon(targetPokemonValue){
+//     let response = await fetch("https://pokeapi.co/api/v2/pokemon/" + targetPokemonValue)
+//     let data = await response.json()
 
-    this.setState((previousState) => {
-      return {
-        // Guarantee that previous state is all kept
-        ...previousState,
-        // Overwrite the parts we want to updated
-        pokemonName: data.name,
-        pokemonId: data.id,
-        pokemonSpriteUrl: data.sprites.other.home.front_default
-      }
-    })
-  }
+//     console.log(data)
 
-  render() {
-    return (
-      <>
-        <h1>This is a class component!</h1>
-        <button onClick={this.getRandomPokemon} >
-          Get a random Pokemon
-        </button>
+//     this.setState((previousState) => {
+//       return {
+//         // Guarantee that previous state is all kept
+//         ...previousState,
+//         // Overwrite the parts we want to updated
+//         pokemonName: data.name,
+//         pokemonId: data.id,
+//         pokemonSpriteUrl: data.sprites.other.home.front_default
+//       }
+//     })
+//   }
 
-        <section>
-          <label htmlFor="pokemonNameInput">Pokemon to search for:</label>
-          <input 
-            type="search" 
-            name="pokemonNameInput" 
-            id="pokemonNameInput" 
-            value={this.state.pokemonSearchTerm} 
-            onChange={(event) => {
-              this.setState((previousState) => {
-                return {
-                  ...previousState,
-                  pokemonSearchTerm: event.target.value
-                }
-              })
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                this.getSpecificPokemon(this.state.pokemonSearchTerm)
-              }
-            }}
-          />
-          <button onClick={() => this.getSpecificPokemon(this.state.pokemonSearchTerm)}>Search!</button>
-        </section>
+//   render() {
+//     return (
+//       <>
+//         <h1>This is a class component!</h1>
+//         <button onClick={this.getRandomPokemon} >
+//           Get a random Pokemon
+//         </button>
 
-        {this.state.pokemonName.length > 0 && 
-        <h1>
-          {this.state.pokemonName}
-        </h1>
-        }
+//         <section>
+//           <label htmlFor="pokemonNameInput">Pokemon to search for:</label>
+//           <input 
+//             type="search" 
+//             name="pokemonNameInput" 
+//             id="pokemonNameInput" 
+//             value={this.state.pokemonSearchTerm} 
+//             onChange={(event) => {
+//               this.setState((previousState) => {
+//                 return {
+//                   ...previousState,
+//                   pokemonSearchTerm: event.target.value
+//                 }
+//               })
+//             }}
+//             onKeyDown={(event) => {
+//               if (event.key === 'Enter') {
+//                 this.getSpecificPokemon(this.state.pokemonSearchTerm)
+//               }
+//             }}
+//           />
+//           <button onClick={() => this.getSpecificPokemon(this.state.pokemonSearchTerm)}>Search!</button>
+//         </section>
 
-        {this.state.pokemonSpriteUrl.length > 0 &&
-        <img src={this.state.pokemonSpriteUrl} />
-        }
-      </>
-    )
-  }
+//         {this.state.pokemonName.length > 0 && 
+//         <h1>
+//           {this.state.pokemonName}
+//         </h1>
+//         }
 
-}
+//         {this.state.pokemonSpriteUrl.length > 0 &&
+//         <img src={this.state.pokemonSpriteUrl} />
+//         }
+//       </>
+//     )
+//   }
 
-export default App
+// }
+
+// export default App
