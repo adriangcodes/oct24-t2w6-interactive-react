@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../App.css'
 import { useParams } from 'react-router-dom'
+import { UserJwtContext } from '../contexts/UserJwtContext'
 
 export function PokemonSearcher() {
   
+  let userJwt = useContext(UserJwtContext)
+
   let {searchTerm} = useParams()
 
   // let [pokemonData, setPokemonData] = useState({})
@@ -31,6 +34,13 @@ export function PokemonSearcher() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Function watches what is defined in the array
 
+  useEffect(() => {
+    if (!userJwt && pokemonSearchTerm > 0) {
+      setPokemonSearchTerm("")
+    } else {
+      // User is logged in and is allowed to search
+    }
+  }, [pokemonSearchTerm, userJwt])
 
   // Equivalent to componentDidUpdate
   useEffect(() => {
