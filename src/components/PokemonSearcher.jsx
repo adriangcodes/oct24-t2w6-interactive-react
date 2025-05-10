@@ -3,31 +3,38 @@ import '../App.css'
 
 export function PokemonSearcher() {
   
-  let [pokemonData, setPokemonData] = useState({})
+  // let [pokemonData, setPokemonData] = useState({})
   let [pokemonName, setPokemonName] = useState("")
-  let [pokemonId, setPokemonId] = useState(0)
+  let [_, setPokemonId] = useState(0)
   let [pokemonSpriteUrl, setPokemonSpriteUrl] = useState("")
   let [pokemonSearchTerm, setPokemonSearchTerm] = useState("")
+
 
   // Equivalent to componentDidMount
   useEffect(() => {
     console.log("Use effect says hello world!")
 
+    getRandomPokemon()
+
     // Return inside useeffect is the equivalent of componentWillUnmount
     return (() => {
       console.log("Component is unmounting now.")
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Function watches what is defined in the array
+
 
   // Equivalent to componentDidUpdate
   useEffect(() => {
     console.log("Use effect says hello world on re-render!")
   })
 
+
   // Equivalent to componentDidUpdate for a specific variable
   useEffect(() => {
     console.log("Use effect says hello world on update pokemonName!")
   }, [pokemonName])
+
 
   const getRandomPokemon = async () => {
     let randomPokemonId = Math.floor(Math.random() * 1025) + 1
@@ -36,6 +43,7 @@ export function PokemonSearcher() {
     getSpecificPokemon(randomPokemonId)
   }
 
+  
   const getSpecificPokemon = async (targetPokemonValue) => {
     let response = await fetch("https://pokeapi.co/api/v2/pokemon/" + targetPokemonValue)
     let data = await response.json()
