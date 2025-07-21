@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import PokemonSearcher from './components/PokemonSearcher.jsx'
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import { HashRouter as BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { BaseLayout } from './pages/layouts/BaseLayout.jsx'
 import { UserJwtProvider } from './contexts/UserJwtProvider.jsx'
 

@@ -13,6 +13,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{  steps.build-publish.outputs.page_url    }}
     steps:
     - id: build-publish
       uses: bitovi/github-actions-react-to-github-pages@v1.2.4
